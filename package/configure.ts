@@ -13,5 +13,9 @@
 */
 
 import type Configure from '@adonisjs/core/commands/configure'
+import { stubsRoot } from './stubs/main.ts'
 
-export async function configure(_command: Configure) {}
+export async function configure(_command: Configure) {
+  const codemods = await _command.createCodemods()
+  await codemods.makeUsingStub(stubsRoot, 'config/web3.stub', {})
+}
