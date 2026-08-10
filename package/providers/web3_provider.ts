@@ -12,10 +12,16 @@ declare module '@adonisjs/core/types' {
 export default class Web3Provider {
   constructor(protected app: ApplicationService) {}
 
-  async boot() {
-    const config = this.app.config.get<Web3Config>('web3')
-    const nonceStore = resolveNonceStore(config.strategy)
+  boot() {
+    this.app.container.singleton('web3.nonceStore', async () => {
+      const config = this.app.config.get<Web3Config | null>('web3', null)
+      if (!config) {
+        throw new Error(
+          'Invalid config exported from "config/web3.ts" file. Make sure to use the defineConfig method'
+        )
+      }
 
-    this.app.container.singleton('web3.nonceStore', () => nonceStore)
+      return resolveNonceStore(config.strategy)
+    })
   }
 }

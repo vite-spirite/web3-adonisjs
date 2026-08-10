@@ -14,7 +14,8 @@
   "main": "build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./types": "./build/src/types.js"
+    "./types": "./build/src/types.js",
+    "./web3_provider": "./build/providers/web3_provider.js"
   },
   "scripts": {
     "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
@@ -82,7 +83,9 @@
   "tsdown": {
     "entry": [
       "./index.ts",
-      "./configure.ts"
+      "./configure.ts",
+      "./stubs/main.ts",
+      "./providers/web3_provider.ts"
     ],
     "outDir": "./build",
     "clean": true,

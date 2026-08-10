@@ -21,4 +21,8 @@ export async function configure(_command: Configure) {
   await codemods.makeUsingStub(stubsRoot, 'migrations/create_nonce_store.stub', {})
   await codemods.makeUsingStub(stubsRoot, 'migrations/make_password_nullable.stub', {})
   await codemods.makeUsingStub(stubsRoot, 'config/web3.stub', {})
+
+  await codemods.updateRcFile((rcFiles) => {
+    rcFiles.addProvider('@vite-spirite/web3-auth-adonisjs/web3_provider')
+  })
 }
