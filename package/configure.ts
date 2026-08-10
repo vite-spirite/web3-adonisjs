@@ -17,5 +17,8 @@ import { stubsRoot } from './stubs/main.ts'
 
 export async function configure(_command: Configure) {
   const codemods = await _command.createCodemods()
+
+  await codemods.makeUsingStub(stubsRoot, 'migrations/create_nonce_store.stub', {})
+  await codemods.makeUsingStub(stubsRoot, 'migrations/make_password_nullable.stub', {})
   await codemods.makeUsingStub(stubsRoot, 'config/web3.stub', {})
 }
