@@ -12,7 +12,7 @@ declare module '@adonisjs/core/types' {
 export default class Web3Provider {
   constructor(protected app: ApplicationService) {}
 
-  boot() {
+  register() {
     this.app.container.singleton('web3.nonceStore', async () => {
       const config = this.app.config.get<Web3Config | null>('web3', null)
       if (!config) {

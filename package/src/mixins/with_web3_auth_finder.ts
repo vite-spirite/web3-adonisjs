@@ -1,7 +1,8 @@
 import { errors } from '@adonisjs/auth'
-import type { LucidModel } from '@adonisjs/lucid/types/model'
 import { verifySignature, buildSiweMessage } from '../verify_signature.js'
-import type { NonceStore } from '../contracts/nonce_store.js'
+import { normalizeAddress, type NonceStore } from '../contracts/nonce_store.js'
+import type { NormalizeConstructor } from '@adonisjs/core/types/helpers'
+import type { BaseModel } from '@adonisjs/lucid/orm'
 
 export interface Web3AuthFinderOptions {
   nonceStore: NonceStore
@@ -12,15 +13,16 @@ export interface Web3AuthFinderOptions {
 export function withWeb3AuthFinder(options: Web3AuthFinderOptions) {
   const { nonceStore, walletAddressColumnName = 'walletAddress', autoCreate = false } = options
 
-  return <Model extends abstract new (...args: any[]) => any>(superclass: Model) => {
-    abstract class Web3AuthFinderMixin extends superclass {
+  return <Model extends NormalizeConstructor<typeof BaseModel>>(superclass: Model) => {
+    class Web3AuthFinderMixin extends superclass {
       static async verifyWeb3Credentials(
-        this: LucidModel,
+        this: Model,
         address: string,
         signature: `0x${string}`,
-        nonce: string
+        nonce: string,
+        email?: string
       ) {
-        const normalized = address.toLowerCase()
+        const normalized = normalizeAddress(address)
 
         const validNonce = await nonceStore.consume(normalized, nonce)
         if (!validNonce) {
@@ -40,7 +42,7 @@ export function withWeb3AuthFinder(options: Web3AuthFinderOptions) {
           if (!autoCreate) {
             throw new errors.E_INVALID_CREDENTIALS('Unknown wallet address')
           }
-          user = await (this as any).create({ [walletAddressColumnName]: normalized })
+          user = await (this as any).create({ [walletAddressColumnName]: normalized, email })
         }
 
         return user

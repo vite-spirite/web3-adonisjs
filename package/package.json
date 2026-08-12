@@ -15,7 +15,8 @@
   "exports": {
     ".": "./build/index.js",
     "./types": "./build/src/types.js",
-    "./web3_provider": "./build/providers/web3_provider.js"
+    "./web3_provider": "./build/providers/web3_provider.js",
+    "./services/main": "./build/services/web3_service.js"
   },
   "scripts": {
     "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
@@ -85,7 +86,8 @@
       "./index.ts",
       "./configure.ts",
       "./stubs/main.ts",
-      "./providers/web3_provider.ts"
+      "./providers/web3_provider.ts",
+      "./services/web3_service.ts"
     ],
     "outDir": "./build",
     "clean": true,
