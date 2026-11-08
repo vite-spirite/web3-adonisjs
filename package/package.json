@@ -9,7 +9,8 @@
   "files": [
     "build",
     "!build/bin",
-    "!build/tests"
+    "!build/tests",
+    "!build/test_helpers"
   ],
   "main": "build/index.js",
   "exports": {
@@ -35,8 +36,16 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": ["adonisjs", "web3", "siwe", "ethereum", "wallet", "authentication"],
-  "author": "",
+  "author": "ViteSpirite",
   "license": "MIT",
+  "homepage": "https://github.com/vite-spirite/web3-auth-adonisjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vite-spirite/web3-auth-adonisjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vite-spirite/web3-auth-adonisjs/issues"
+  },
   "devDependencies": {
     "@adonisjs/assembler": "^8.0.0",
     "@adonisjs/auth": "^10.1.0",
