@@ -20,8 +20,8 @@ router.get('/web3/nonce', async ({ request, response }) => {
   }
 
   const nonceStore = await app.container.make('web3.nonceStore')
-  const nonce = await nonceStore.generate(address)
-  return response.json({ nonce })
+  const challenge = await nonceStore.generate(address)
+  return response.json(challenge)
 })
 
 router.post('/web3/login', async ({ request, auth }) => {
