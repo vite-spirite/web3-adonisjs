@@ -9,29 +9,35 @@
 
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
-import { controllers } from '#generated/controllers'
+import app from '@adonisjs/core/services/app'
+import User from '#models/user'
 
-router.get('/', () => {
-  return { hello: 'world' }
+// start/routes.ts
+router.get('/web3/nonce', async ({ request, response }) => {
+  const address = request.qs().address
+  if (!address) {
+    return response.badRequest({ message: 'Missing address query parameter' })
+  }
+
+  const nonceStore = await app.container.make('web3.nonceStore')
+  const nonce = await nonceStore.generate(address)
+  return response.json({ nonce })
+})
+
+router.post('/web3/login', async ({ request, auth }) => {
+  const { address, signature, nonce, email } = request.only([
+    'address',
+    'signature',
+    'nonce',
+    'email',
+  ])
+  const user = await User.verifyWeb3Credentials(address, signature, nonce, email)
+  await auth.use('web').login(user)
+  return user
 })
 
 router
-  .group(() => {
-    router
-      .group(() => {
-        router.post('signup', [controllers.NewAccount, 'store'])
-        router.post('login', [controllers.AccessTokens, 'store'])
-      })
-      .prefix('auth')
-      .as('auth')
-
-    router
-      .group(() => {
-        router.get('profile', [controllers.Profile, 'show'])
-        router.post('logout', [controllers.AccessTokens, 'destroy'])
-      })
-      .prefix('account')
-      .as('profile')
-      .use(middleware.auth())
+  .get('/me', async ({ auth }) => {
+    return auth.user
   })
-  .prefix('/api/v1')
+  .use(middleware.auth())
