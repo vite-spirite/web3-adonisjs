@@ -1,6 +1,6 @@
 {
-  "name": "@vite-spirite/web3-adonisjs",
-  "description": "",
+  "name": "@vite-spirite/web3-auth-adonisjs",
+  "description": "Sign-in with Ethereum for AdonisJS: SIWE-style signature verification, nonce stores and a Lucid auth-finder mixin",
   "version": "0.0.0",
   "engines": {
     "node": ">=24.0.0"

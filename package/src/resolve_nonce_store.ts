@@ -13,6 +13,6 @@ export function resolveNonceStore(strategy: NonceStrategy): NonceStore {
   }
 
   throw new Error(
-    `[web3-adonis] Invalid nonceStore strategy "${strategy}" in config/web3.ts. Expected "cache" or "database".`
+    `[web3-auth-adonisjs] Invalid nonceStore strategy "${strategy}" in config/web3.ts. Expected "cache" or "db".`
   )
 }
