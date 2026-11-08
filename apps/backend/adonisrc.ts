@@ -28,7 +28,7 @@ export default defineConfig({
     () => import('@adonisjs/core/commands'),
     () => import('@adonisjs/lucid/commands'),
     () => import('@adonisjs/session/commands'),
-    () => import('@adonisjs/cache/commands')
+    () => import('@adonisjs/cache/commands'),
   ],
 
   /*
@@ -55,7 +55,7 @@ export default defineConfig({
     () => import('@adonisjs/auth/auth_provider'),
     () => import('#providers/api_provider'),
     () => import('@adonisjs/cache/cache_provider'),
-    () => import('@vite-spirite/web3-auth-adonisjs/web3_provider')
+    () => import('@vite-spirite/web3-auth-adonisjs/web3_provider'),
   ],
 
   /*

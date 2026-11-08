@@ -16,6 +16,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "test": "turbo test",
+    "release:package": "npm run release --workspace=@vite-spirite/web3-auth-adonisjs",
     "lint": "turbo lint",
     "format": "turbo format",
     "typecheck": "turbo typecheck"
