@@ -38,13 +38,13 @@
   "keywords": ["adonisjs", "web3", "siwe", "ethereum", "wallet", "authentication"],
   "author": "ViteSpirite",
   "license": "MIT",
-  "homepage": "https://github.com/vite-spirite/web3-auth-adonisjs",
+  "homepage": "https://github.com/vite-spirite/web3-adonisjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vite-spirite/web3-auth-adonisjs"
+    "url": "https://github.com/vite-spirite/web3-adonisjs"
   },
   "bugs": {
-    "url": "https://github.com/vite-spirite/web3-auth-adonisjs/issues"
+    "url": "https://github.com/vite-spirite/web3-adonisjs/issues"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^8.0.0",
