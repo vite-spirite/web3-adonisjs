@@ -1,15 +1,18 @@
-import type { NonceStore } from './contracts/nonce_store.ts'
+import type { NonceStore, NonceStoreOptions } from './contracts/nonce_store.ts'
 import { CacheNonceStore } from './stores/cache_nonce_store.ts'
 import { DatabaseNonceStore } from './stores/database_nonce_store.ts'
 
 export type NonceStrategy = 'cache' | 'db'
 
-export function resolveNonceStore(strategy: NonceStrategy): NonceStore {
+export function resolveNonceStore(
+  strategy: NonceStrategy,
+  options?: NonceStoreOptions
+): NonceStore {
   switch (strategy) {
     case 'cache':
-      return new CacheNonceStore()
+      return new CacheNonceStore(undefined, options)
     case 'db':
-      return new DatabaseNonceStore()
+      return new DatabaseNonceStore(undefined, options)
   }
 
   throw new Error(

@@ -34,7 +34,7 @@
     "version": "npm run build",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": ["adonisjs", "web3", "siwe", "ethereum", "wallet", "authentication"],
   "author": "",
   "license": "MIT",
   "devDependencies": {

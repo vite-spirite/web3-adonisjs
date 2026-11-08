@@ -1,6 +1,7 @@
 import { errors } from '@adonisjs/auth'
-import { verifySignature, buildSiweMessage } from '../verify_signature.js'
-import { normalizeAddress, type NonceStore } from '../contracts/nonce_store.js'
+import { verifySignature } from '../verify_signature.ts'
+import { isSiweChallengeValid } from '../siwe.ts'
+import { normalizeAddress, type NonceStore } from '../contracts/nonce_store.ts'
 import type { NormalizeConstructor } from '@adonisjs/core/types/helpers'
 import type { BaseModel } from '@adonisjs/lucid/orm'
 
@@ -24,12 +25,15 @@ export function withWeb3AuthFinder(options: Web3AuthFinderOptions) {
       ) {
         const normalized = normalizeAddress(address)
 
-        const validNonce = await nonceStore.consume(normalized, nonce)
-        if (!validNonce) {
+        const message = await nonceStore.consume(normalized, nonce)
+        if (!message) {
           throw new errors.E_INVALID_CREDENTIALS('Invalid or expired nonce')
         }
 
-        const message = buildSiweMessage(nonce)
+        if (!isSiweChallengeValid(message, nonce)) {
+          throw new errors.E_INVALID_CREDENTIALS('Invalid or expired challenge')
+        }
+
         const isValid = await verifySignature({ address: normalized, message, signature })
         if (!isValid) {
           throw new errors.E_INVALID_CREDENTIALS('Invalid signature')

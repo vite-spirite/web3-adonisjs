@@ -1,17 +1,21 @@
-import type { NonceStore } from '../contracts/nonce_store.ts'
-import { randomUUID, normalizeAddress, NONCE_TTL_SECONDS } from '../contracts/nonce_store.ts'
+import type { NonceChallenge, NonceStore, NonceStoreOptions } from '../contracts/nonce_store.ts'
+import { generateSiweNonce } from 'viem/siwe'
+import { normalizeAddress, resolveOptions } from '../contracts/nonce_store.ts'
+import { buildSiweMessage } from '../siwe.ts'
 
 type CacheLike = {
-  set(opts: { key: string; value: unknown; ttl?: number }): Promise<unknown>
+  set(opts: { key: string; value: unknown; ttl?: number | undefined }): Promise<unknown>
   get(opts: { key: string }): Promise<unknown>
   delete(opts: { key: string }): Promise<unknown>
 }
 
 export class CacheNonceStore implements NonceStore {
   #cache: CacheLike
+  #options?: NonceStoreOptions
 
-  constructor(cache?: CacheLike) {
+  constructor(cache?: CacheLike, options?: NonceStoreOptions) {
     this.#cache = cache as CacheLike
+    this.#options = options
   }
 
   async #getCache(): Promise<CacheLike> {
@@ -20,28 +24,37 @@ export class CacheNonceStore implements NonceStore {
     return cache
   }
 
-  async generate(address: string): Promise<string> {
+  async generate(address: string): Promise<NonceChallenge> {
     const cache = await this.#getCache()
-    const nonce = randomUUID()
+    const { ttlSeconds, siwe } = resolveOptions(this.#options)
 
-    cache.set({
-      key: `web3-auth-nonce:${normalizeAddress(address)}`,
-      value: nonce,
-      ttl: NONCE_TTL_SECONDS,
+    const normalized = normalizeAddress(address)
+    const nonce = generateSiweNonce()
+    const message = buildSiweMessage({ ...siwe, address: normalized, nonce, ttlSeconds })
+
+    await cache.set({
+      key: `web3-auth-nonce:${normalized}`,
+      value: { nonce, message },
+      // BentoCache expects milliseconds
+      ttl: ttlSeconds * 1000,
     })
 
-    return nonce
+    return { nonce, message }
   }
 
-  async consume(address: string, nonce: string): Promise<boolean> {
+  async consume(address: string, nonce: string): Promise<string | null> {
     const cache = await this.#getCache()
 
     const key = `web3-auth-nonce:${normalizeAddress(address)}`
-    const stored = await cache.get({ key })
+    const stored = (await cache.get({ key })) as { nonce: string; message: string } | null
 
-    if (stored !== nonce) return false
+    if (!stored || stored.nonce !== nonce) return null
 
     await cache.delete({ key })
-    return true
+    return stored.message
+  }
+
+  async cleanup(): Promise<number> {
+    return 0
   }
 }

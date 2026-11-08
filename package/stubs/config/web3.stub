@@ -8,4 +8,8 @@ import { defineConfig } from '@vite-spirite/web3-auth-adonisjs'
 
 export default defineConfig({
   strategy: 'cache',
+  siwe: {
+    domain: 'localhost:3333',
+    statement: 'Sign in with your wallet',
+  },
 })

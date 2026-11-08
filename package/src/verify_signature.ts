@@ -23,7 +23,3 @@ export async function verifySignature(options: VerifySignatureOptions): Promise<
     return false
   }
 }
-
-export function buildSiweMessage(nonce: string): string {
-  return `Sign this message to authenticate: ${nonce}`
-}

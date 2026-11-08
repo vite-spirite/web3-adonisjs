@@ -32,6 +32,7 @@ export async function createTestDatabase() {
     table.increments('id')
     table.string('address').notNullable()
     table.string('nonce').notNullable()
+    table.text('message').notNullable()
     table.timestamp('expires_at').notNullable()
     table.unique(['address'])
   })

@@ -21,7 +21,10 @@ export default class Web3Provider {
         )
       }
 
-      return resolveNonceStore(config.strategy)
+      return resolveNonceStore(config.strategy, {
+        ttlSeconds: config.ttlSeconds,
+        siwe: config.siwe,
+      })
     })
   }
 }
