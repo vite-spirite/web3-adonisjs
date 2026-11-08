@@ -69,7 +69,7 @@
     "better-sqlite3": "^12.10.0",
     "luxon": "^3.7.2",
     "reflect-metadata": "^0.2.2",
-    "@vite-spirite/web3-auth-adonisjs": "workspace:*"
+    "@vite-spirite/web3-auth-adonisjs": "*"
   },
   "hotHook": {
     "boundaries": [
