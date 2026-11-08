@@ -143,6 +143,7 @@
   },
   "prettier": "@adonisjs/prettier-config",
   "dependencies": {
+    "luxon": "^3.7.2",
     "viem": "^2.55.11"
   }
 }
