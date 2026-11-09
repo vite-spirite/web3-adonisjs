@@ -1,0 +1,25 @@
+# TEMPORARY - one-off unpublish helper, deleted after use.
+name: unpublish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to unpublish (e.g. 0.0.0-stage)
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  unpublish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          registry-url: https://registry.npmjs.org
+      - name: Unpublish
+        run: npm unpublish "@vite-spirite/web3-auth-adonisjs@${{ inputs.version }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
